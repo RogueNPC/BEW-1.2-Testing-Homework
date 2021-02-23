@@ -119,7 +119,7 @@ class MainTests(unittest.TestCase):
 
         # a GET request to the URL /book/1, check to see that the
         # status code is 200
-        result = app.test_client().get('/book/1')
+        result = app.test_client().get('/book/1', follow_redirects=True)
         self.assertEqual(result.status_code, 200)
         result_text = result.get_data(as_text=True)
 
@@ -136,16 +136,27 @@ class MainTests(unittest.TestCase):
 
     def test_book_detail_logged_in(self):
         """Test that the book appears on its detail page."""
-        # TODO: Use helper functions to create books, authors, user, & to log in
+        # creates books, authors, user
+        create_books()
+        create_user()
+        login(self.app, 'me1', 'password')
 
-        # TODO: Make a GET request to the URL /book/1, check to see that the
+        # a GET request to the URL /book/1, check to see that the
         # status code is 200
+        result = app.test_client().get('/book/1', follow_redirects=True)
+        self.assertEqual(result.status_code, 200)
+        result_text = result.get_data(as_text=True)
 
-        # TODO: Check that the response contains the book's title, publish date,
+        # Checks that the response contains the book's title, publish date,
         # and author's name
+        book = Book.query.get(1)
+        self.assertEqual(book.title, 'To Kill a Mockingbird')
+        self.assertEqual(book.publish_date, date(1960, 7, 11))
+        self.assertEqual(book.author.name, "Harper Lee")
 
-        # TODO: Check that the response contains the 'Favorite' button
-        pass
+
+        # Checks that the response contains the 'Favorite' button
+        # self.assertIn(---,---)
 
     def test_update_book(self):
         """Test updating a book."""
