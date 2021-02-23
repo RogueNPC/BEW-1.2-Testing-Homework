@@ -83,6 +83,7 @@ class MainTests(unittest.TestCase):
         self.assertNotIn('Create Book', response_text)
         self.assertNotIn('Create Author', response_text)
         self.assertNotIn('Create Genre', response_text)
+        self.assertNotIn('Log Out', response_text)
  
     def test_homepage_logged_in(self):
         """Test that the books show up on the homepage."""
@@ -103,6 +104,7 @@ class MainTests(unittest.TestCase):
         self.assertIn('Create Book', response_text)
         self.assertIn('Create Author', response_text)
         self.assertIn('Create Genre', response_text)
+        self.assertIn('Log Out', response_text)
 
         # Check that the page doesn't contain things we don't expect
         # (these should be shown only to logged out users)
