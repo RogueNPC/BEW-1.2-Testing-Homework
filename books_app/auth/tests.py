@@ -53,17 +53,31 @@ class AuthTests(TestCase):
         db.create_all()
 
     def test_signup(self):
-        # TODO: Write a test for the signup route. It should:
-        # - Make a POST request to /signup, sending a username & password
-        # - Check that the user now exists in the database
-        pass
+        # - Makes a POST request to /signup, sending a username & password
+        # - Checks that the user now exists in the database
+        post_data = {
+            'username': 'thatuser',
+            'password': 'thatpassword'
+        }
+        self.app.post('/signup', data=post_data)
+
+        created_user = User.query.filter_by(username='thatuser').one()
+        self.assertIsNotNone(created_user)
 
     def test_signup_existing_user(self):
-        # TODO: Write a test for the signup route. It should:
         # - Create a user
+        create_user()
         # - Make a POST request to /signup, sending the same username & password
         # - Check that the form is displayed again with an error message
-        pass
+        post_data = {
+            'username': 'me1',
+            'password': 'password'
+        }
+        response = self.app.post('/signup', data=post_data)
+        self.assertEqual(response.status_code, 200)
+
+        response_text = response.get_data(as_text=True)
+        self.assertIn('That username is taken', response_text)
 
     def test_login_correct_password(self):
         # TODO: Write a test for the login route. It should:

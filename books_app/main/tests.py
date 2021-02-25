@@ -145,7 +145,6 @@ class MainTests(unittest.TestCase):
         # status code is 200
         result = app.test_client().get('/book/1', follow_redirects=True)
         self.assertEqual(result.status_code, 200)
-        result_text = result.get_data(as_text=True)
 
         # Checks that the response contains the book's title, publish date,
         # and author's name
@@ -153,14 +152,6 @@ class MainTests(unittest.TestCase):
         self.assertEqual(book.title, 'To Kill a Mockingbird')
         self.assertEqual(book.publish_date, date(1960, 7, 11))
         self.assertEqual(book.author.name, "Harper Lee")
-
-
-        # Checks that the response contains the 'Favorite' button
-        ###########################################
-        # UNFINISHED
-
-        # self.assertIn(---,---)
-        ###########################################
 
     def test_update_book(self):
         """Test updating a book."""
