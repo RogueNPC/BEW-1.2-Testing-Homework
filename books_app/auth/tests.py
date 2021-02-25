@@ -80,27 +80,54 @@ class AuthTests(TestCase):
         self.assertIn('That username is taken', response_text)
 
     def test_login_correct_password(self):
-        # TODO: Write a test for the login route. It should:
-        # - Create a user
+        # - Create a 
+        create_user()
         # - Make a POST request to /login, sending the created username & password
         # - Check that the "login" button is not displayed on the homepage
-        pass
+        post_data = {
+            'username': 'me1',
+            'password': 'password'
+        }
+        self.app.post('/login', data=post_data)
+        
+        response = self.app.get('/', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        response_text = response.get_data(as_text=True)
+
+        self.assertNotIn('Log In', response_text)
 
     def test_login_nonexistent_user(self):
         # TODO: Write a test for the login route. It should:
         # - Make a POST request to /login, sending a username & password
         # - Check that the login form is displayed again, with an appropriate
         #   error message
-        pass
+        post_data = {
+            'username': 'me1',
+            'password': 'password'
+        }
+        response = self.app.post('/login', data=post_data)
+        self.assertEqual(response.status_code, 200)
+
+        response_text = response.get_data(as_text=True)
+        self.assertIn('No user with that username', response_text)
 
     def test_login_incorrect_password(self):
         # TODO: Write a test for the login route. It should:
         # - Create a user
+        create_user()
         # - Make a POST request to /login, sending the created username &
         #   an incorrect password
         # - Check that the login form is displayed again, with an appropriate
         #   error message
-        pass
+        post_data = {
+            'username': 'me1',
+            'password': 'wrongpassword'
+        }
+        response = self.app.post('/login', data=post_data)
+        self.assertEqual(response.status_code, 200)
+
+        response_text = response.get_data(as_text=True)
+        self.assertIn('Password doesn&#39;t match.', response_text)
 
     def test_logout(self):
         # TODO: Write a test for the logout route. It should:
