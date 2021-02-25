@@ -97,7 +97,6 @@ class AuthTests(TestCase):
         self.assertNotIn('Log In', response_text)
 
     def test_login_nonexistent_user(self):
-        # TODO: Write a test for the login route. It should:
         # - Make a POST request to /login, sending a username & password
         # - Check that the login form is displayed again, with an appropriate
         #   error message
@@ -112,7 +111,6 @@ class AuthTests(TestCase):
         self.assertIn('No user with that username', response_text)
 
     def test_login_incorrect_password(self):
-        # TODO: Write a test for the login route. It should:
         # - Create a user
         create_user()
         # - Make a POST request to /login, sending the created username &
@@ -130,9 +128,19 @@ class AuthTests(TestCase):
         self.assertIn('Password doesn&#39;t match.', response_text)
 
     def test_logout(self):
-        # TODO: Write a test for the logout route. It should:
         # - Create a user
+        create_user()
         # - Log the user in (make a POST request to /login)
+        post_data = {
+            'username': 'me1',
+            'password': 'password'
+        }
+        self.app.post('/login', data=post_data)
         # - Make a GET request to /logout
+        self.app.get('/logout', follow_redirects=True)
         # - Check that the "login" button appears on the homepage
-        pass
+        response = self.app.get('/', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        response_text = response.get_data(as_text=True)
+
+        self.assertIn('Log In', response_text)
