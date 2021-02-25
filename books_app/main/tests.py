@@ -4,7 +4,7 @@ import unittest
 from datetime import date
  
 from books_app import app, db, bcrypt
-from books_app.models import Book, Author, User, Audience
+from books_app.models import Book, Author, Genre, User, Audience
 
 """
 Run these tests with the command:
@@ -156,7 +156,11 @@ class MainTests(unittest.TestCase):
 
 
         # Checks that the response contains the 'Favorite' button
+        ###########################################
+        # UNFINISHED
+
         # self.assertIn(---,---)
+        ###########################################
 
     def test_update_book(self):
         """Test updating a book."""
@@ -221,16 +225,35 @@ class MainTests(unittest.TestCase):
 
     def test_create_author(self):
         """Test creating an author."""
-        # TODO: Make a POST request to the /create_author route
+        create_books()
+        create_user()
+        login(self.app, 'me1', 'password')
 
-        # TODO: Verify that the author was updated in the database
-        pass
+        # Makes a POST request to the /create_author route
+        post_data = {
+            'name': 'Bill Nye',
+            'biography': 'He is a scientist.'
+        }
+        self.app.post('/create_author', data=post_data)
+
+        # Verifies that the author was updated in the database
+        created_author = Author.query.filter_by(name='Bill Nye').one()
+        self.assertIsNotNone(created_author)
 
     def test_create_genre(self):
-        # TODO: Make a POST request to the /create_genre route, 
+        create_books()
+        create_user()
+        login(self.app, 'me1', 'password')
 
-        # TODO: Verify that the genre was updated in the database
-        pass
+        # Makes a POST request to the /create_genre route, 
+        post_data = {
+            'name': 'Fantasy'
+        }
+        self.app.post('/create_genre', data=post_data)
+
+        # Verifies that the genre was updated in the database
+        created_genre = Genre.query.filter_by(name='Fantasy').one()
+        self.assertIsNotNone(created_genre)
 
     def test_profile_page(self):
         # TODO: Make a GET request to the /profile/1 route
